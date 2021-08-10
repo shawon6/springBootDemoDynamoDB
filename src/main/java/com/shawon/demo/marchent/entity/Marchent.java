@@ -14,12 +14,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import lombok.NoArgsConstructor;
 
- 
-@NoArgsConstructor
 @DynamoDBTable(tableName = "samplemarchent")
 public class Marchent {
-	
-
 	
 	private int id;
 	
