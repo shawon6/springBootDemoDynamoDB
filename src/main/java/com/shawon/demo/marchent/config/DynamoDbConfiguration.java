@@ -15,27 +15,5 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 @Configuration
 public class DynamoDbConfiguration {
 	
-	@Value("${aws.region}")
-	public String aws_region;
 	
-	@Value("${service.endpoint}")
-	public String service_endpoint;
-	
-	@Bean
-	public DynamoDBMapper dynamoDBMapper() {
-		return new DynamoDBMapper(buildAmazonDynamoDB());
-	}
-
-	private AmazonDynamoDB buildAmazonDynamoDB() { 
-		return  AmazonDynamoDBClientBuilder
-				.standard()
-				.withEndpointConfiguration(
-						new AwsClientBuilder.EndpointConfiguration(
-								service_endpoint, 
-								aws_region
-						)
-				)
-				.build();
-				
-	}
 }
