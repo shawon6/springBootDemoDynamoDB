@@ -19,12 +19,12 @@ public class MarchentRepositoryDynamoDB {
 		dynamoDBMapper.save(marchent);
 	} 
 	
-	public Marchent findById(String id) {
-		return dynamoDBMapper.load(Marchent.class, id);
+	public Marchent findById(Marchent marchent) {
+		return dynamoDBMapper.load(Marchent.class, marchent.getId(), marchent.getName());
 	} 
 	
 	public Marchent delete(Marchent model) {
-		Marchent m = findById(model.getId());
+		Marchent m = findById(model);
 		dynamoDBMapper.delete(m);
 		return m;
 	} 

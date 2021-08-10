@@ -26,12 +26,14 @@ public class MarchentService {
 			throw new Exception("Model can't be Null");
 		}
 		
-		MarchentDTO checkDTO = getMarchentById(model.getId());
-		if(checkDTO.getId() != "") {
+		Marchent m = convertToEntity(model);
+		MarchentDTO checkDTO = getMarchentById(m);
+		if (checkDTO!= null)
+		if(checkDTO.getId()!=null) {
 			throw new Exception("Already Exists");
 		}
 		
-		marchentReporsitory.save(convertToEntity(model));
+		marchentReporsitory.save(m);
 	}
 
 	
@@ -42,9 +44,9 @@ public class MarchentService {
 			throw new Exception("Model can't be Null");
 		}
 		
-		MarchentDTO checkDTO = getMarchentById(model.getId());
+		MarchentDTO checkDTO = getMarchentById(convertToEntity(model));
 		
-		if(checkDTO.getId() == "") {
+		if(checkDTO.getId() != null) {
 			throw new Exception("No data found to update");
 		}
 		
@@ -59,7 +61,7 @@ public class MarchentService {
 			throw new Exception("Model can't be Null");
 		}
 		
-		MarchentDTO checkDTO = getMarchentById(model.getId());
+		MarchentDTO checkDTO = getMarchentById(convertToEntity(model));
 		
 		if(checkDTO.getId() == "") {
 			throw new Exception("No data found to delete");
@@ -69,8 +71,11 @@ public class MarchentService {
 		return model;
 	}
 
-	public MarchentDTO getMarchentById(String id) {
-		MarchentDTO marchentDTO = convertToDTO(marchentReporsitory.findById(id));
+	public MarchentDTO getMarchentById(Marchent marchent) {
+		Marchent m = marchentReporsitory.findById(marchent);
+		MarchentDTO marchentDTO = new MarchentDTO();
+		if(m!= null)
+			 marchentDTO = convertToDTO(m);
 		return marchentDTO;
 	}
 
@@ -79,7 +84,7 @@ public class MarchentService {
 		return marchentDTOlist;
 	}
 	
-	private Marchent convertToEntity(MarchentDTO model) {
+	public Marchent convertToEntity(MarchentDTO model) {
 		Marchent marchent = modelMapper.map(model, Marchent.class);
 		return marchent;
 	}
