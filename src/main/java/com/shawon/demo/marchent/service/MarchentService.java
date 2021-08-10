@@ -27,7 +27,7 @@ public class MarchentService {
 		}
 		
 		MarchentDTO checkDTO = getMarchentById(model.getId());
-		if(checkDTO.getId() > 0) {
+		if(checkDTO.getId() != "") {
 			throw new Exception("Already Exists");
 		}
 		
@@ -44,7 +44,7 @@ public class MarchentService {
 		
 		MarchentDTO checkDTO = getMarchentById(model.getId());
 		
-		if(checkDTO.getId() == 0) {
+		if(checkDTO.getId() == "") {
 			throw new Exception("No data found to update");
 		}
 		
@@ -61,7 +61,7 @@ public class MarchentService {
 		
 		MarchentDTO checkDTO = getMarchentById(model.getId());
 		
-		if(checkDTO.getId() == 0) {
+		if(checkDTO.getId() == "") {
 			throw new Exception("No data found to delete");
 		}
 		
@@ -69,7 +69,7 @@ public class MarchentService {
 		return model;
 	}
 
-	public MarchentDTO getMarchentById(int id) {
+	public MarchentDTO getMarchentById(String id) {
 		MarchentDTO marchentDTO = convertToDTO(marchentReporsitory.findById(id));
 		return marchentDTO;
 	}

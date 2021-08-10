@@ -19,7 +19,7 @@ public class MarchentRepositoryDynamoDB {
 		dynamoDBMapper.save(marchent);
 	} 
 	
-	public Marchent findById(int id) {
+	public Marchent findById(String id) {
 		return dynamoDBMapper.load(Marchent.class, id);
 	} 
 	
