@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.shawon.demo.marchent.dto.MarchentDTO;
 import com.shawon.demo.marchent.entity.Marchent;
-import com.shawon.demo.marchent.repository.MarchentReporsitory;
+//import com.shawon.demo.marchent.repository.MarchentReporsitory;
 import com.shawon.demo.marchent.repository.MarchentRepositoryDynamoDB;
 
 @Service
