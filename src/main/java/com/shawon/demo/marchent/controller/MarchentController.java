@@ -53,7 +53,7 @@ public class MarchentController {
 		ResponseDTO responseDTO = new ResponseDTO();
 		
 		try {
-			MarchentDTO marchentDTO = marchentService.getMarchentById(marchentService.convertToEntity(model));
+			MarchentDTO marchentDTO = marchentService.getMarchentByKey(marchentService.convertToEntity(model));
 			responseDTO.setSuccess(true);
 			responseDTO.setData(marchentDTO);
 			return responseDTO;
