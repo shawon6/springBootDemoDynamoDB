@@ -33,7 +33,7 @@ public class MarchentRepositoryDynamoDB {
 		return m;
 	} 
 	
-	public List<Marchent> getAllMarchent () {
+	public List<Marchent> getUsingQuery () {
 		Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
 		eav.put(":v1", new AttributeValue().withS("1"));
 

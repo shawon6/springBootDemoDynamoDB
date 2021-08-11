@@ -80,7 +80,7 @@ public class MarchentService {
 	}
 
 	public List<MarchentDTO> getAllMarchent() {
-		List<MarchentDTO> marchentDTOlist = ConvertToDtoList(marchentReporsitory.getAllMarchent());
+		List<MarchentDTO> marchentDTOlist = ConvertToDtoList(marchentReporsitory.getUsingQuery());
 		return marchentDTOlist;
 	}
 	
