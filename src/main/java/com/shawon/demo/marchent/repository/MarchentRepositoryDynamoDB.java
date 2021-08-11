@@ -1,12 +1,16 @@
 package com.shawon.demo.marchent.repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.shawon.demo.marchent.entity.Marchent;
 
 @Repository
@@ -30,6 +34,14 @@ public class MarchentRepositoryDynamoDB {
 	} 
 	
 	public List<Marchent> getAllMarchent () {
-		return null; //dynamoDBMapper.batchLoad(itemsToGet, config);
+		Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+		eav.put(":v1", new AttributeValue().withS("1"));
+
+		DynamoDBQueryExpression<Marchent> queryExpression = new DynamoDBQueryExpression<Marchent>()
+		    .withKeyConditionExpression("id = :v1")
+		    .withExpressionAttributeValues(eav);
+
+		List<Marchent> marchentList = dynamoDBMapper.query(Marchent.class, queryExpression);
+		return marchentList;
 	} 
 }
