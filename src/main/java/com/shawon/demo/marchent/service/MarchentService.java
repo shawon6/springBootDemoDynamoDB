@@ -27,11 +27,11 @@ public class MarchentService {
 		}
 		
 		Marchent m = convertToEntity(model);
-		MarchentDTO checkDTO = getMarchentByKey(m);
-		if (checkDTO!= null)
-		if(checkDTO.getId()!=null) {
-			throw new Exception("Already Exists");
-		}
+//		MarchentDTO checkDTO = getMarchentByKey(m);
+//		if (checkDTO!= null)
+//		if(checkDTO.getId()!=null) {
+//			throw new Exception("Already Exists");
+//		}
 		
 		marchentReporsitory.save(m);
 	}

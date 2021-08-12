@@ -36,11 +36,11 @@ public class MarchentRepositoryDynamoDB {
 	public List<Marchent> getUsingQuery () {
 		Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
 		eav.put(":v1", new AttributeValue().withS("1"));
-		//eav.put(":v2", new AttributeValue().withS("Ashik"));
+		//eav.put(":v2", new AttributeValue().withS("01948"));
 
 		DynamoDBQueryExpression<Marchent> queryExpression = new DynamoDBQueryExpression<Marchent>()
 		    .withKeyConditionExpression("id = :v1")
-		    //.withFilterExpression("name <> :v2")
+		    //.withFilterExpression("number = :v2")
 		    .withExpressionAttributeValues(eav);
 
 		List<Marchent> marchentList = dynamoDBMapper.query(Marchent.class, queryExpression);
