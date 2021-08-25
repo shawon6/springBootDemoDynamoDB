@@ -151,42 +151,42 @@ public class MarchentController {
 	@PostMapping("/addMarchentUsingWebFlux")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseDTO addMarchentUsingWebFlux(@RequestBody Marchent model) {
+	public Mono<Boolean> addMarchentUsingWebFlux(@RequestBody Marchent model) {
 		
-		ResponseDTO responseDTO = new ResponseDTO();
+		Mono<Boolean> marchentDTOlist = marchentService.addMarchentUsingWebFlux(model);
+		return marchentDTOlist;
+
 		
-		try {
-			Mono<Boolean> marchentDTOlist = marchentService.addMarchentUsingWebFlux(model);
-			responseDTO.setSuccess(true);
-			responseDTO.setData(marchentDTOlist);
-			return responseDTO;
-		}catch (Exception e) {
-			e.printStackTrace();
-			responseDTO.setSuccess(false);
-			responseDTO.setMessage(e.getMessage());
-			return responseDTO;
-		}
+	}
+	
+	@PostMapping("/deleteMarchentUsingWebFlux")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Mono<Boolean> deleteMarchentUsingWebFlux(@RequestBody Marchent model) {
+		
+		Mono<Boolean> marchentDTOlist = marchentService.deleteMarchentUsingWebFlux(model);
+		return marchentDTOlist;
+
 		
 	}
 	
 	@PostMapping("/getMarchentByIdUsingWebFlux")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseDTO getMarchentByIdUsingWebFlux(@Valid @RequestBody Marchent model) {
+	public Mono<Marchent> getMarchentByIdUsingWebFlux(@Valid @RequestBody Marchent model){
 		
-		ResponseDTO responseDTO = new ResponseDTO();
+		Mono<Marchent> marchentDTOlist = marchentService.getMarchentByIdUsingWebFlux(model);
+		return marchentDTOlist;
 		
-		try {
-			Mono<Marchent> marchentDTOlist = marchentService.getMarchentByIdUsingWebFlux(model);
-			responseDTO.setSuccess(true);
-			responseDTO.setData(marchentDTOlist);
-			return responseDTO;
-		}catch (Exception e) {
-			e.printStackTrace();
-			responseDTO.setSuccess(false);
-			responseDTO.setMessage(e.getMessage());
-			return responseDTO;
-		}
+	}
+	
+	@PostMapping("/getAllMarchentByIdUsingWebFlux")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Flux<Marchent> getAllMarchentByIdUsingWebFlux(){
+		
+		Flux<Marchent> marchentDTOlist = marchentService.getAllMarchentByIdUsingWebFlux();
+		return marchentDTOlist;
 		
 	}
 }

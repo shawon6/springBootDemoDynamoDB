@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.shawon.demo.marchent.dto.MarchentDTO;
 import com.shawon.demo.marchent.entity.Marchent;
-import com.shawon.demo.marchent.repository.MarchentRepoReactive;
-//import com.shawon.demo.marchent.repository.MarchentReporsitory;
 import com.shawon.demo.marchent.repository.MarchentRepositoryDynamoDB;
 
 import reactor.core.publisher.Flux;
@@ -117,10 +115,21 @@ public class MarchentService {
         return marchentReporsitory.addMarchentUsingWebFlux(model);
 	}
 
+	
+	public Mono<Boolean> deleteMarchentUsingWebFlux(Marchent model) {
+        return marchentReporsitory.deleteMarchentUsingWebFlux(model);
+	}
+
 
 
 	public Mono<Marchent> getMarchentByIdUsingWebFlux(Marchent model) {
 		return marchentReporsitory.getMarchentByIdUsingWebFlux(model);
+	}
+
+
+
+	public Flux<Marchent> getAllMarchentByIdUsingWebFlux() {
+		return marchentReporsitory.getAllMarchentByIdUsingWebFlux();
 	}
 	
 }
