@@ -7,6 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,12 +21,19 @@ import com.shawon.demo.marchent.entity.Marchent;
 import com.shawon.demo.marchent.service.MarchentService;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/marchent")
 public class MarchentController {
-	@Autowired
-	private MarchentService marchentService;
+//	@Autowired
+//	private MarchentService marchentService;
+	
+	private final MarchentService marchentService;
+
+    public MarchentController(MarchentService marchentService) {
+        this.marchentService = marchentService;
+    }
 	
 	@PostMapping("/addMarchent")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -139,15 +147,36 @@ public class MarchentController {
 		
 	}
 	
-	@PostMapping("/getAllMarchentUsingWebFlux")
+	@PostMapping("/addMarchentUsingWebFlux")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseDTO getAllMarchentUsingWebFlux() {
+	public ResponseDTO addMarchentUsingWebFlux(@RequestBody Marchent model) {
 		
 		ResponseDTO responseDTO = new ResponseDTO();
 		
 		try {
-			Flux<Marchent> marchentDTOlist = marchentService.getAllMarchentUsingWebFlux();
+			Mono<Boolean> marchentDTOlist = marchentService.addMarchentUsingWebFlux(model);
+			responseDTO.setSuccess(true);
+			responseDTO.setData(marchentDTOlist);
+			return responseDTO;
+		}catch (Exception e) {
+			e.printStackTrace();
+			responseDTO.setSuccess(false);
+			responseDTO.setMessage(e.getMessage());
+			return responseDTO;
+		}
+		
+	}
+	
+	@PostMapping("/getMarchentByIdUsingWebFlux")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseDTO getMarchentByIdUsingWebFlux(@Validated @RequestBody Marchent model) {
+		
+		ResponseDTO responseDTO = new ResponseDTO();
+		
+		try {
+			Mono<Boolean> marchentDTOlist = marchentService.getMarchentByIdUsingWebFlux(model);
 			responseDTO.setSuccess(true);
 			responseDTO.setData(marchentDTOlist);
 			return responseDTO;

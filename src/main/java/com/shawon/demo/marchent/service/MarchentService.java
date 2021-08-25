@@ -15,17 +15,24 @@ import com.shawon.demo.marchent.repository.MarchentRepoReactive;
 import com.shawon.demo.marchent.repository.MarchentRepositoryDynamoDB;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class MarchentService {
-	@Autowired
-	private MarchentRepositoryDynamoDB marchentReporsitory;
+//	@Autowired
+//	private MarchentRepositoryDynamoDB marchentReporsitory;
+	
+	private final MarchentRepositoryDynamoDB marchentReporsitory;
+
+    public MarchentService(MarchentRepositoryDynamoDB marchentReporsitory) {
+        this.marchentReporsitory = marchentReporsitory;
+    }
 
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	@Autowired
-	private MarchentRepoReactive marchentRepoReactive;
+//	@Autowired
+//	private MarchentRepoReactive marchentRepoReactive;
 	
 	public void add(MarchentDTO model) throws Exception {
 		if (model == null ) {
@@ -106,8 +113,8 @@ public class MarchentService {
 		return MarchentDTOList;
 	}
 	
-	public Flux<Marchent> getAllMarchentUsingWebFlux() {
-        return marchentRepoReactive.findAll();
+	public Mono<Boolean> addMarchentUsingWebFlux(Marchent model) {
+        return marchentReporsitory.addMarchentUsingWebFlux(model);
 	}
 	
 }

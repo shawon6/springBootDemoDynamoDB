@@ -3,6 +3,7 @@ package com.shawon.demo.marchent.repository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,10 +13,15 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.shawon.demo.marchent.entity.Marchent;
+import com.shawon.demo.marchent.exception.DynamoDbException;
+
+import reactor.core.publisher.Mono;
 
 @Repository
 public class MarchentRepositoryDynamoDB {
 
+	public static final String DYNAMO_ERROR = "DYNAMO_ERROR";
+	
 	@Autowired
 	private DynamoDBMapper dynamoDBMapper;
 	
@@ -45,5 +51,18 @@ public class MarchentRepositoryDynamoDB {
 
 		List<Marchent> marchentList = dynamoDBMapper.query(Marchent.class, queryExpression);
 		return marchentList;
+	}
+
+	public Mono<Boolean> addMarchentUsingWebFlux(Marchent model) {
+		try {
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> dynamoDBMapper.save(model));
+
+            return Mono.fromCompletionStage(future)
+                    .then(Mono.just(true))
+                    .onErrorMap(throwable -> new DynamoDbException(DYNAMO_ERROR, throwable));
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+            return Mono.error(ex);
+        }
 	} 
 }
