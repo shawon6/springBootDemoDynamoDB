@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shawon.demo.common.ResponseDTO;
 import com.shawon.demo.marchent.dto.MarchentDTO;
+import com.shawon.demo.marchent.entity.Marchent;
 import com.shawon.demo.marchent.service.MarchentService;
+
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/marchent")
@@ -124,6 +127,27 @@ public class MarchentController {
 		
 		try {
 			List<MarchentDTO> marchentDTOlist = marchentService.getAllMarchent();
+			responseDTO.setSuccess(true);
+			responseDTO.setData(marchentDTOlist);
+			return responseDTO;
+		}catch (Exception e) {
+			e.printStackTrace();
+			responseDTO.setSuccess(false);
+			responseDTO.setMessage(e.getMessage());
+			return responseDTO;
+		}
+		
+	}
+	
+	@PostMapping("/getAllMarchentUsingWebFlux")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseDTO getAllMarchentUsingWebFlux() {
+		
+		ResponseDTO responseDTO = new ResponseDTO();
+		
+		try {
+			Flux<Marchent> marchentDTOlist = marchentService.getAllMarchentUsingWebFlux();
 			responseDTO.setSuccess(true);
 			responseDTO.setData(marchentDTOlist);
 			return responseDTO;

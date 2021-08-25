@@ -10,8 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.shawon.demo.marchent.dto.MarchentDTO;
 import com.shawon.demo.marchent.entity.Marchent;
+import com.shawon.demo.marchent.repository.MarchentRepoReactive;
 //import com.shawon.demo.marchent.repository.MarchentReporsitory;
 import com.shawon.demo.marchent.repository.MarchentRepositoryDynamoDB;
+
+import reactor.core.publisher.Flux;
 
 @Service
 public class MarchentService {
@@ -20,6 +23,9 @@ public class MarchentService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private MarchentRepoReactive marchentRepoReactive;
 	
 	public void add(MarchentDTO model) throws Exception {
 		if (model == null ) {
@@ -98,6 +104,10 @@ public class MarchentService {
 	private List<MarchentDTO> ConvertToDtoList(List<Marchent> mrchentList) {
 		List<MarchentDTO> MarchentDTOList = mrchentList.stream().map(entity -> convertToDTO(entity)).collect(Collectors.toList());
 		return MarchentDTOList;
+	}
+	
+	public Flux<Marchent> getAllMarchentUsingWebFlux() {
+        return marchentRepoReactive.findAll();
 	}
 	
 }
