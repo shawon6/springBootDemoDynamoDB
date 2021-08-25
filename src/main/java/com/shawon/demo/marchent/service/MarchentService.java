@@ -116,5 +116,11 @@ public class MarchentService {
 	public Mono<Boolean> addMarchentUsingWebFlux(Marchent model) {
         return marchentReporsitory.addMarchentUsingWebFlux(model);
 	}
+
+
+
+	public Mono<Marchent> getMarchentByIdUsingWebFlux(Marchent model) {
+		return marchentReporsitory.getMarchentByIdUsingWebFlux(model);
+	}
 	
 }

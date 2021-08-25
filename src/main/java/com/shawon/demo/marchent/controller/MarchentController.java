@@ -2,6 +2,7 @@ package com.shawon.demo.marchent.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -171,12 +172,12 @@ public class MarchentController {
 	@PostMapping("/getMarchentByIdUsingWebFlux")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseDTO getMarchentByIdUsingWebFlux(@Validated @RequestBody Marchent model) {
+	public ResponseDTO getMarchentByIdUsingWebFlux(@Valid @RequestBody Marchent model) {
 		
 		ResponseDTO responseDTO = new ResponseDTO();
 		
 		try {
-			Mono<Boolean> marchentDTOlist = marchentService.getMarchentByIdUsingWebFlux(model);
+			Mono<Marchent> marchentDTOlist = marchentService.getMarchentByIdUsingWebFlux(model);
 			responseDTO.setSuccess(true);
 			responseDTO.setData(marchentDTOlist);
 			return responseDTO;

@@ -64,5 +64,17 @@ public class MarchentRepositoryDynamoDB {
         	ex.printStackTrace();
             return Mono.error(ex);
         }
-	} 
+	}
+	
+	public  Mono<Marchent> getMarchentByIdUsingWebFlux(Marchent model) {
+        try {
+            CompletableFuture<Marchent> future =
+                    CompletableFuture.supplyAsync(() -> dynamoDBMapper.load(Marchent.class, model.getId(), model.getName()));
+
+            return Mono.fromCompletionStage(future)
+                    .onErrorMap(throwable -> new DynamoDbException(DYNAMO_ERROR, throwable));
+        } catch (Exception ex) {
+            return Mono.error(ex);
+        }
+    }
 }
