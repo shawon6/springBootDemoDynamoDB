@@ -158,6 +158,17 @@ public class MarchentController {
 
 		
 	}
+
+	@PostMapping("/modMarchentUsingWebFlux")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Mono<Boolean> modMarchentUsingWebFlux(@Valid @RequestBody Marchent model) {
+		
+		Mono<Boolean> modResult = marchentService.modMarchentUsingWebFlux(model);
+		return modResult;
+
+		
+	}
 	
 	@PostMapping("/deleteMarchentUsingWebFlux")
 	@Consumes(MediaType.APPLICATION_JSON)

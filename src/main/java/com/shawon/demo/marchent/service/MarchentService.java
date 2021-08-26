@@ -1,8 +1,11 @@
 package com.shawon.demo.marchent.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.modelmapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import com.shawon.demo.marchent.dto.MarchentDTO;
 import com.shawon.demo.marchent.entity.Marchent;
 import com.shawon.demo.marchent.repository.MarchentRepositoryDynamoDB;
 
+import lombok.var;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -130,6 +134,25 @@ public class MarchentService {
 
 	public Flux<Marchent> getAllMarchentByIdUsingWebFlux() {
 		return marchentReporsitory.getAllMarchentByIdUsingWebFlux();
+	}
+
+
+
+	public Mono<Boolean> modMarchentUsingWebFlux(@Valid Marchent model) {
+		Mono<Marchent> exixting = marchentReporsitory.getMarchentByIdUsingWebFlux(model);
+
+		try {
+			System.out.println(exixting.subscribe().toString());
+			System.out.println(exixting.block().getNumber().toString());
+			
+			if(model.getNumber() == null || model.getNumber().isEmpty()) {
+				model.setNumber(exixting.block().getNumber());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		 return marchentReporsitory.addMarchentUsingWebFlux(model);
 	}
 	
 }
