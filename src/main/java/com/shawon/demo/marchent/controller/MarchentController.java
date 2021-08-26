@@ -7,18 +7,14 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shawon.demo.common.ResponseDTO;
 import com.shawon.demo.marchent.dto.MarchentDTO;
-import com.shawon.demo.marchent.entity.Marchent;
+import com.shawon.demo.marchent.entity.Merchent;
 import com.shawon.demo.marchent.service.MarchentService;
 
 import reactor.core.publisher.Flux;
@@ -151,7 +147,7 @@ public class MarchentController {
 	@PostMapping("/addMarchentUsingWebFlux")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Mono<Boolean> addMarchentUsingWebFlux(@RequestBody Marchent model) {
+	public Mono<Boolean> addMarchentUsingWebFlux(@RequestBody Merchent model) {
 		
 		Mono<Boolean> marchentDTOlist = marchentService.addMarchentUsingWebFlux(model);
 		return marchentDTOlist;
@@ -162,7 +158,7 @@ public class MarchentController {
 	@PostMapping("/modMarchentUsingWebFlux")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Mono<Boolean> modMarchentUsingWebFlux(@Valid @RequestBody Marchent model) {
+	public Mono<Boolean> modMarchentUsingWebFlux(@Valid @RequestBody Merchent model) {
 		
 		Mono<Boolean> modResult = marchentService.modMarchentUsingWebFlux(model);
 		return modResult;
@@ -173,7 +169,7 @@ public class MarchentController {
 	@PostMapping("/deleteMarchentUsingWebFlux")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Mono<Boolean> deleteMarchentUsingWebFlux(@RequestBody Marchent model) {
+	public Mono<Boolean> deleteMarchentUsingWebFlux(@RequestBody Merchent model) {
 		
 		Mono<Boolean> marchentDTOlist = marchentService.deleteMarchentUsingWebFlux(model);
 		return marchentDTOlist;
@@ -184,9 +180,9 @@ public class MarchentController {
 	@PostMapping("/getMarchentByIdUsingWebFlux")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Mono<Marchent> getMarchentByIdUsingWebFlux(@Valid @RequestBody Marchent model){
+	public Mono<Merchent> getMarchentByIdUsingWebFlux(@Valid @RequestBody Merchent model){
 		
-		Mono<Marchent> marchentDTOlist = marchentService.getMarchentByIdUsingWebFlux(model);
+		Mono<Merchent> marchentDTOlist = marchentService.getMarchentByIdUsingWebFlux(model);
 		return marchentDTOlist;
 		
 	}
@@ -194,9 +190,9 @@ public class MarchentController {
 	@PostMapping("/getAllMarchentByIdUsingWebFlux")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Flux<Marchent> getAllMarchentByIdUsingWebFlux(){
+	public Flux<Merchent> getAllMarchentByIdUsingWebFlux(){
 		
-		Flux<Marchent> marchentDTOlist = marchentService.getAllMarchentByIdUsingWebFlux();
+		Flux<Merchent> marchentDTOlist = marchentService.getAllMarchentByIdUsingWebFlux();
 		return marchentDTOlist;
 		
 	}

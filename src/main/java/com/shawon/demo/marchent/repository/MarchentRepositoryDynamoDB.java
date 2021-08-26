@@ -10,10 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.shawon.demo.marchent.entity.Marchent;
+import com.shawon.demo.marchent.entity.Merchent;
 import com.shawon.demo.marchent.exception.DynamoDbException;
 
 import reactor.core.publisher.Flux;
@@ -27,35 +26,35 @@ public class MarchentRepositoryDynamoDB {
 	@Autowired
 	private DynamoDBMapper dynamoDBMapper;
 	
-	public void save(Marchent marchent) {
-		dynamoDBMapper.save(marchent);
+	public void save(Merchent merchent) {
+		dynamoDBMapper.save(merchent);
 	} 
 	
-	public Marchent findByKey(Marchent marchent) {
-		return dynamoDBMapper.load(Marchent.class, marchent.getId(), marchent.getName());
+	public Merchent findByKey(Merchent merchent) {
+		return dynamoDBMapper.load(Merchent.class, merchent.getId(), merchent.getName());
 	} 
 	
-	public Marchent delete(Marchent model) {
-		Marchent m = findByKey(model);
+	public Merchent delete(Merchent model) {
+		Merchent m = findByKey(model);
 		dynamoDBMapper.delete(m);
 		return m;
 	} 
 	
-	public List<Marchent> getUsingQuery () {
+	public List<Merchent> getUsingQuery () {
 		Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
 		eav.put(":v1", new AttributeValue().withS("1"));
 		//eav.put(":v2", new AttributeValue().withS("01948"));
 
-		DynamoDBQueryExpression<Marchent> queryExpression = new DynamoDBQueryExpression<Marchent>()
+		DynamoDBQueryExpression<Merchent> queryExpression = new DynamoDBQueryExpression<Merchent>()
 		    .withKeyConditionExpression("id = :v1")
 		    //.withFilterExpression("number = :v2")
 		    .withExpressionAttributeValues(eav);
 
-		List<Marchent> marchentList = dynamoDBMapper.query(Marchent.class, queryExpression);
-		return marchentList;
+		List<Merchent> merchentList = dynamoDBMapper.query(Merchent.class, queryExpression);
+		return merchentList;
 	}
 
-	public Mono<Boolean> addMarchentUsingWebFlux(Marchent model) {
+	public Mono<Boolean> addMarchentUsingWebFlux(Merchent model) {
 		try {
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> dynamoDBMapper.save(model));
 
@@ -68,7 +67,7 @@ public class MarchentRepositoryDynamoDB {
         }
 	}
 	
-	public Mono<Boolean> deleteMarchentUsingWebFlux(Marchent model) {
+	public Mono<Boolean> deleteMarchentUsingWebFlux(Merchent model) {
 		try {
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> dynamoDBMapper.delete(model));
 
@@ -81,22 +80,23 @@ public class MarchentRepositoryDynamoDB {
         }
 	}
 	
-	public  Mono<Marchent> getMarchentByIdUsingWebFlux(Marchent model) {
+	public  Mono<Merchent> getMarchentByIdUsingWebFlux(Merchent model) {
         try {
-            CompletableFuture<Marchent> future =
-                    CompletableFuture.supplyAsync(() -> dynamoDBMapper.load(Marchent.class, model.getId(), model.getName()));
+            CompletableFuture<Merchent> future =
+                    CompletableFuture.supplyAsync(() -> dynamoDBMapper.load(Merchent.class, model.getId(), model.getName()));
 
             return Mono.fromCompletionStage(future)
                     .onErrorMap(throwable -> new DynamoDbException(DYNAMO_ERROR, throwable));
         } catch (Exception ex) {
+        	//Log.error("MarchentRepositoryDynamoDB - getMarchentByIdUsingWebFlux - onException:{} " , ex);
             return Mono.error(ex);
         }
     }
 
-	public Flux<Marchent> getAllMarchentByIdUsingWebFlux() {
+	public Flux<Merchent> getAllMarchentByIdUsingWebFlux() {
 		 try {
-	            CompletableFuture<List<Marchent>> future =
-	                    CompletableFuture.supplyAsync(() -> dynamoDBMapper.scan(Marchent.class, new DynamoDBScanExpression()));
+	            CompletableFuture<List<Merchent>> future =
+	                    CompletableFuture.supplyAsync(() -> dynamoDBMapper.scan(Merchent.class, new DynamoDBScanExpression()));
 
 	            return Mono.fromCompletionStage(future)
 	                    .flatMapMany(item -> Flux.fromStream(item.stream()))

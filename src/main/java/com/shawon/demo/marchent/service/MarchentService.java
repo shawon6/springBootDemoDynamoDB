@@ -1,25 +1,23 @@
 package com.shawon.demo.marchent.service;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
-import javax.validation.Valid;
 
 import org.modelmapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shawon.demo.marchent.dto.MarchentDTO;
-import com.shawon.demo.marchent.entity.Marchent;
+import com.shawon.demo.marchent.entity.Merchent;
 import com.shawon.demo.marchent.repository.MarchentRepositoryDynamoDB;
 
-import lombok.var;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
+@Slf4j
 public class MarchentService {
 //	@Autowired
 //	private MarchentRepositoryDynamoDB marchentReporsitory;
@@ -41,7 +39,7 @@ public class MarchentService {
 			throw new Exception("Model can't be Null");
 		}
 		
-		Marchent m = convertToEntity(model);
+		Merchent m = convertToEntity(model);
 //		MarchentDTO checkDTO = getMarchentByKey(m);
 //		if (checkDTO!= null)
 //		if(checkDTO.getId()!=null) {
@@ -86,8 +84,8 @@ public class MarchentService {
 		return model;
 	}
 
-	public MarchentDTO getMarchentByKey(Marchent marchent) {
-		Marchent m = marchentReporsitory.findByKey(marchent);
+	public MarchentDTO getMarchentByKey(Merchent merchent) {
+		Merchent m = marchentReporsitory.findByKey(merchent);
 		MarchentDTO marchentDTO = new MarchentDTO();
 		if(m!= null)
 			 marchentDTO = convertToDTO(m);
@@ -99,60 +97,56 @@ public class MarchentService {
 		return marchentDTOlist;
 	}
 	
-	public Marchent convertToEntity(MarchentDTO model) {
-		Marchent marchent = modelMapper.map(model, Marchent.class);
-		return marchent;
+	public Merchent convertToEntity(MarchentDTO model) {
+		Merchent merchent = modelMapper.map(model, Merchent.class);
+		return merchent;
 	}
 
-	private MarchentDTO convertToDTO(Marchent marchent) {
-		MarchentDTO dto = modelMapper.map(marchent, MarchentDTO.class);
+	private MarchentDTO convertToDTO(Merchent merchent) {
+		MarchentDTO dto = modelMapper.map(merchent, MarchentDTO.class);
 		return dto;
 	}
 
 
-	private List<MarchentDTO> ConvertToDtoList(List<Marchent> mrchentList) {
+	private List<MarchentDTO> ConvertToDtoList(List<Merchent> mrchentList) {
 		List<MarchentDTO> MarchentDTOList = mrchentList.stream().map(entity -> convertToDTO(entity)).collect(Collectors.toList());
 		return MarchentDTOList;
 	}
 	
-	public Mono<Boolean> addMarchentUsingWebFlux(Marchent model) {
+	public Mono<Boolean> addMarchentUsingWebFlux(Merchent model) {
         return marchentReporsitory.addMarchentUsingWebFlux(model);
 	}
 
 	
-	public Mono<Boolean> deleteMarchentUsingWebFlux(Marchent model) {
+	public Mono<Boolean> deleteMarchentUsingWebFlux(Merchent model) {
         return marchentReporsitory.deleteMarchentUsingWebFlux(model);
 	}
 
 
 
-	public Mono<Marchent> getMarchentByIdUsingWebFlux(Marchent model) {
+	public Mono<Merchent> getMarchentByIdUsingWebFlux(Merchent model) {
+		
 		return marchentReporsitory.getMarchentByIdUsingWebFlux(model);
 	}
 
 
 
-	public Flux<Marchent> getAllMarchentByIdUsingWebFlux() {
+	public Flux<Merchent> getAllMarchentByIdUsingWebFlux() {
 		return marchentReporsitory.getAllMarchentByIdUsingWebFlux();
 	}
 
 
 
-	public Mono<Boolean> modMarchentUsingWebFlux(@Valid Marchent model) {
-		Mono<Marchent> exixting = marchentReporsitory.getMarchentByIdUsingWebFlux(model);
-
-		try {
-			System.out.println(exixting.subscribe().toString());
-			System.out.println(exixting.block().getNumber().toString());
-			
-			if(model.getNumber() == null || model.getNumber().isEmpty()) {
-				model.setNumber(exixting.block().getNumber());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+	public Mono<Boolean> modMarchentUsingWebFlux( Merchent model) {
+		if(ObjectUtils.isEmpty(model.getNumber())){
+			return Mono.just(false);
 		}
-		
-		 return marchentReporsitory.addMarchentUsingWebFlux(model);
+
+		return marchentReporsitory.getMarchentByIdUsingWebFlux(model).flatMap(merchent -> {
+			log.info(merchent.toString());
+			merchent.setNumber(model.getNumber());
+			return marchentReporsitory.addMarchentUsingWebFlux(merchent);
+		});
 	}
 	
 }
