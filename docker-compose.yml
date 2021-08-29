@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  mapp-localstack:
+    image: localstack/localstack:0.10.9
+    container_name: mapp-localstack
+    ports:
+      - "4567-4597:4567-4597"
+      - "8010:8010"
+    environment:
+      - SERVICES=dynamodb,s3,sqs,ssm,lambda,sns
+      - DEBUG=${DEBUG- }
+      - DATA_DIR=/tmp/localstack/data
+      - PORT_WEB_UI=8010
+      - LAMBDA_EXECUTOR=docker-reuse
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - DEFAULT_REGION=ap-southeast-1
+    volumes:
+      - my-datavolume:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - backend
+
+  mapp-dynamodb-admin:
+    depends_on:
+      - mapp-localstack
+    image: aaronshaf/dynamodb-admin
+    container_name: mapp-dynamodb-admin
+    ports:
+      - 8020:8001
+    environment:
+      - DYNAMO_ENDPOINT=http://mapp-localstack:4569
+    networks:
+      - backend
+
+volumes:
+  my-datavolume:
+
+networks:
+  backend:
