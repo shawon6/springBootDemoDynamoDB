@@ -3,6 +3,7 @@ package com.shawon.demo;
 import com.shawon.demo.marchent.entity.Merchent;
 import com.shawon.demo.marchent.service.MarchentService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +18,8 @@ class SpringBootDemoDynamoDbApplicationTests {
     private MarchentService marchentService;
 
     @Test
-    void saveMerchentHappyPath() {
+    @DisplayName("Save Merchant Happy Path")
+    void saveMerchantHappyPath() {
 
         Merchent model = Merchent.builder()
                 .id("1")
