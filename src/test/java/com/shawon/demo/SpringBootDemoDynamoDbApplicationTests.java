@@ -1,5 +1,6 @@
 package com.shawon.demo;
 
+import com.shawon.demo.common.CSVOperations;
 import com.shawon.demo.marchent.entity.Merchent;
 import com.shawon.demo.marchent.service.MarchentService;
 import org.junit.jupiter.api.Assertions;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @SpringBootTest
@@ -16,6 +18,14 @@ class SpringBootDemoDynamoDbApplicationTests {
 
     @Autowired
     private MarchentService marchentService;
+
+    @Autowired
+    CSVOperations csvOperations;
+
+    @Test
+    void test() throws IOException {
+//        Assertions.assertTrue(csvOperations.csvToBean());
+    }
 
     @Test
     @DisplayName("Save Merchant Happy Path")
